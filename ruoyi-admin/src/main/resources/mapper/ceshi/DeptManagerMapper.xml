@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.ceshi.mapper.DeptManagerMapper">
+    
+    <resultMap type="DeptManager" id="DeptManagerResult">
+        <result property="id"    column="id"    />
+        <result property="thisLevelId"    column="this_level_id"    />
+        <result property="name"    column="name"    />
+        <result property="superLevel"    column="super_level"    />
+    </resultMap>
+
+    <sql id="selectDeptManagerVo">
+        select id, this_level_id, name, super_level from dept_manager
+    </sql>
+
+    <select id="selectDeptManagerList" parameterType="DeptManager" resultMap="DeptManagerResult">
+        <include refid="selectDeptManagerVo"/>
+        <where>  
+            <if test="thisLevelId != null "> and this_level_id = #{thisLevelId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="superLevel != null "> and super_level = #{superLevel}</if>
+        </where>
+    </select>
+    
+    <select id="selectDeptManagerById" parameterType="Long" resultMap="DeptManagerResult">
+        <include refid="selectDeptManagerVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDeptManager" parameterType="DeptManager" useGeneratedKeys="true" keyProperty="id">
+        insert into dept_manager
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="thisLevelId != null">this_level_id,</if>
+            <if test="name != null">name,</if>
+            <if test="superLevel != null">super_level,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="thisLevelId != null">#{thisLevelId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="superLevel != null">#{superLevel},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDeptManager" parameterType="DeptManager">
+        update dept_manager
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="thisLevelId != null">this_level_id = #{thisLevelId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="superLevel != null">super_level = #{superLevel},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDeptManagerById" parameterType="Long">
+        delete from dept_manager where id = #{id}
+    </delete>
+
+    <delete id="deleteDeptManagerByIds" parameterType="String">
+        delete from dept_manager where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

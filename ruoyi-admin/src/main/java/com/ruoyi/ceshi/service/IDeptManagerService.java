@@ -30,6 +30,8 @@ public interface IDeptManagerService
 
     //
     public List<Node> selectDeptManagerNode(String url);
+
+    public boolean selectDeptManagerFile(DeptManager deptManager);
     //
 
     /**

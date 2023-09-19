@@ -43,6 +43,13 @@ public class DeptManagerController extends BaseController
         List<Node> node = deptManagerService.selectDeptManagerNode(deptManager.getUrl());
         return success(node);
     }
+
+    @PreAuthorize("@ss.hasPermi('ceshi:manager:list')")
+    @GetMapping("/file")
+    public AjaxResult file(DeptManager deptManager)
+    {
+        return success(deptManagerService.selectDeptManagerFile(deptManager));
+    }
     //
 
     /**

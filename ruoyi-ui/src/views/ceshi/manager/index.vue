@@ -37,131 +37,137 @@
           <span>这是个文件</span>
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            <el-button type="primary" @click="loadTheFile">确 定</el-button>
           </span>
         </el-dialog>
       </el-col>
       <el-col :span="14" :xs="24">
 
-        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="本级" prop="thisLevelId">
-            <el-input
-              v-model="queryParams.thisLevelId"
-              placeholder="请输入本级"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="名称" prop="name">
-            <el-input
-              v-model="queryParams.name"
-              placeholder="请输入名称"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="上级" prop="superLevel">
-            <el-input
-              v-model="queryParams.superLevel"
-              placeholder="请输入上级"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
-        </el-form>
-
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-button
-              type="primary"
-              plain
-              icon="el-icon-plus"
-              size="mini"
-              @click="handleAdd"
-              v-hasPermi="['ceshi:manager:add']"
-            >新增</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="info"
-              plain
-              icon="el-icon-sort"
-              size="mini"
-              @click="toggleExpandAll"
-            >展开/折叠</el-button>
-          </el-col>
-          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-        </el-row>
-
-        <el-table
-          v-if="refreshTable"
-          v-loading="loading"
-          :data="managerList"
-          row-key="thisLevelId"
-          :default-expand-all="isExpandAll"
-          :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-        >
-          <el-table-column label="本级" prop="thisLevelId" />
-          <el-table-column label="名称" align="center" prop="name" />
-          <el-table-column label="上级" align="center" prop="superLevel" />
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-edit"
-                @click="handleUpdate(scope.row)"
-                v-hasPermi="['ceshi:manager:edit']"
-              >修改</el-button>
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-plus"
-                @click="handleAdd(scope.row)"
-                v-hasPermi="['ceshi:manager:add']"
-              >新增</el-button>
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-delete"
-                @click="handleDelete(scope.row)"
-                v-hasPermi="['ceshi:manager:remove']"
-              >删除</el-button>
-            </template>
-          </el-table-column>
+        <el-table v-loading="loading" :data="this.zijiedian" style="width: 100%" @row-dblclick="haha">
+          <el-table-column prop="name" label="文件名" width="300"></el-table-column>
+          <el-table-column prop="url" label="文件路径" width="400"></el-table-column>
         </el-table>
 
-        <!-- 添加或修改测试对话框 -->
-        <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-          <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-            <el-form-item label="本级" prop="thisLevelId">
-              <el-input v-model="form.thisLevelId" placeholder="请输入本级" />
-            </el-form-item>
-            <el-form-item label="名称" prop="name">
-              <el-input v-model="form.name" placeholder="请输入名称" />
-            </el-form-item>
-            <el-form-item label="上级" prop="superLevel">
-              <treeselect v-model="form.superLevel" :options="managerOptions" :normalizer="normalizer" placeholder="请选择上级" />
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitForm">确 定</el-button>
-            <el-button @click="cancel">取 消</el-button>
-          </div>
-        </el-dialog>
+        <!--<el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">-->
+          <!--<el-form-item label="本级" prop="thisLevelId">-->
+            <!--<el-input-->
+              <!--v-model="queryParams.thisLevelId"-->
+              <!--placeholder="请输入本级"-->
+              <!--clearable-->
+              <!--@keyup.enter.native="handleQuery"-->
+            <!--/>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="名称" prop="name">-->
+            <!--<el-input-->
+              <!--v-model="queryParams.name"-->
+              <!--placeholder="请输入名称"-->
+              <!--clearable-->
+              <!--@keyup.enter.native="handleQuery"-->
+            <!--/>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="上级" prop="superLevel">-->
+            <!--<el-input-->
+              <!--v-model="queryParams.superLevel"-->
+              <!--placeholder="请输入上级"-->
+              <!--clearable-->
+              <!--@keyup.enter.native="handleQuery"-->
+            <!--/>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item>-->
+          <!--<el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>-->
+            <!--<el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>-->
+          <!--</el-form-item>-->
+        <!--</el-form>-->
+
+        <!--<el-row :gutter="10" class="mb8">-->
+          <!--<el-col :span="1.5">-->
+            <!--<el-button-->
+              <!--type="primary"-->
+              <!--plain-->
+              <!--icon="el-icon-plus"-->
+              <!--size="mini"-->
+              <!--@click="handleAdd"-->
+              <!--v-hasPermi="['ceshi:manager:add']"-->
+            <!--&gt;新增</el-button>-->
+          <!--</el-col>-->
+          <!--<el-col :span="1.5">-->
+            <!--<el-button-->
+              <!--type="info"-->
+              <!--plain-->
+              <!--icon="el-icon-sort"-->
+              <!--size="mini"-->
+              <!--@click="toggleExpandAll"-->
+            <!--&gt;展开/折叠</el-button>-->
+          <!--</el-col>-->
+          <!--<right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>-->
+        <!--</el-row>-->
+
+        <!--<el-table-->
+          <!--v-if="refreshTable"-->
+          <!--v-loading="loading"-->
+          <!--:data="managerList"-->
+          <!--row-key="thisLevelId"-->
+          <!--:default-expand-all="isExpandAll"-->
+          <!--:tree-props="{children: 'children', hasChildren: 'hasChildren'}"-->
+        <!--&gt;-->
+          <!--<el-table-column label="本级" prop="thisLevelId" />-->
+          <!--<el-table-column label="名称" align="center" prop="name" />-->
+          <!--<el-table-column label="上级" align="center" prop="superLevel" />-->
+          <!--<el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->
+            <!--<template slot-scope="scope">-->
+              <!--<el-button-->
+                <!--size="mini"-->
+                <!--type="text"-->
+                <!--icon="el-icon-edit"-->
+                <!--@click="handleUpdate(scope.row)"-->
+                <!--v-hasPermi="['ceshi:manager:edit']"-->
+              <!--&gt;修改</el-button>-->
+              <!--<el-button-->
+                <!--size="mini"-->
+                <!--type="text"-->
+                <!--icon="el-icon-plus"-->
+                <!--@click="handleAdd(scope.row)"-->
+                <!--v-hasPermi="['ceshi:manager:add']"-->
+              <!--&gt;新增</el-button>-->
+              <!--<el-button-->
+                <!--size="mini"-->
+                <!--type="text"-->
+                <!--icon="el-icon-delete"-->
+                <!--@click="handleDelete(scope.row)"-->
+                <!--v-hasPermi="['ceshi:manager:remove']"-->
+              <!--&gt;删除</el-button>-->
+            <!--</template>-->
+          <!--</el-table-column>-->
+        <!--</el-table>-->
+
+        <!--&lt;!&ndash; 添加或修改测试对话框 &ndash;&gt;-->
+        <!--<el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>-->
+          <!--<el-form ref="form" :model="form" :rules="rules" label-width="80px">-->
+            <!--<el-form-item label="本级" prop="thisLevelId">-->
+              <!--<el-input v-model="form.thisLevelId" placeholder="请输入本级" />-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="名称" prop="name">-->
+              <!--<el-input v-model="form.name" placeholder="请输入名称" />-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="上级" prop="superLevel">-->
+              <!--<treeselect v-model="form.superLevel" :options="managerOptions" :normalizer="normalizer" placeholder="请选择上级" />-->
+            <!--</el-form-item>-->
+          <!--</el-form>-->
+          <!--<div slot="footer" class="dialog-footer">-->
+            <!--<el-button type="primary" @click="submitForm">确 定</el-button>-->
+            <!--<el-button @click="cancel">取 消</el-button>-->
+          <!--</div>-->
+        <!--</el-dialog>-->
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import { nodeManager,listManager, getManager, delManager, addManager, updateManager } from "@/api/ceshi/manager";
+import { loadTheFileManager,nodeManager,listManager, getManager, delManager, addManager, updateManager } from "@/api/ceshi/manager";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import axios from 'axios';
 
 export default {
   name: "Manager",
@@ -171,6 +177,12 @@ export default {
   data() {
     return {
       //
+      haha(){
+        alert("你好...");
+      },
+      zijiedian: null,
+      display: null,
+      linshi:null,
       //控制对话框开关
       dialogVisible: false,
       //节点数据
@@ -211,7 +223,8 @@ export default {
         thisLevelId: null,
         name: null,
         superLevel: null,
-        url: null
+        url: null,
+        fileName:null
       },
       // 表单参数
       form: {},
@@ -228,6 +241,46 @@ export default {
   },
   methods: {
     //
+    //加载文件
+    loadTheFile(){
+      this.dialogVisible = false;
+      this.queryParams.fileName = this.linshi.name;
+      this.queryParams.url = this.linshi.url;
+      loadTheFileManager(this.queryParams).then(response => {
+        this.display = response.data;
+      });
+      if(this.display != true) return;
+      this.downloadFile();
+    },
+    downloadFile() {
+        // 发送HTTP GET请求获取文件数据
+        axios.get('profile/upload/file/' + this.linshi.name, {
+          responseType: 'blob', // 指定响应类型为二进制数据
+        })
+        .then(response => {
+          // 创建一个Blob对象，表示文件数据
+          const blob = new Blob([response.data], { type: response.headers['content-type'] });
+
+          // 使用URL.createObjectURL创建文件的URL
+          const url = window.URL.createObjectURL(blob);
+
+          // 创建一个<a>元素用于下载
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'file-name.ext'; // 指定文件名
+          a.style.display = 'none';
+
+          // 将<a>元素添加到DOM并触发点击事件来下载文件
+          document.body.appendChild(a);
+          a.click();
+
+          // 清理URL对象，释放资源
+          window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+          console.error('下载文件时发生错误：', error);
+        });
+    },
     /** 关闭对话框 */
     handleClose(done) {
       this.dialogVisible = false;
@@ -240,6 +293,7 @@ export default {
     /** 节点单击事件 */
     handleNodeClick(data) {
       if(data.isLeaf == false) return;
+      this.linshi = data;
       this.dialogVisible = true;
     },
     /** 懒加载 */
@@ -260,6 +314,7 @@ export default {
       this.queryParams.url = node.data.url;
       nodeManager(this.queryParams).then(response => {
         this.data = this.handleTree(response.data, "url", "parentUrl");
+        this.zijiedian = this.data;
         for(var i in this.data){
           if(this.data[i].isDirectory === 1)
             this.data[i].isLeaf = false;

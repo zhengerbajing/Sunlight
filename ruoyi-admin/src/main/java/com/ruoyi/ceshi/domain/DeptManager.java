@@ -34,6 +34,16 @@ public class DeptManager extends TreeEntity
     @Excel(name = "url")
     private String url;
 
+    private String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     public String getUrl() {
         return url;
     }
@@ -87,6 +97,7 @@ public class DeptManager extends TreeEntity
             .append("name", getName())
             .append("superLevel", getSuperLevel())
             .append("url", getUrl())
-            .toString();
+            .append("fileName",getFileName())
+                .toString();
     }
 }

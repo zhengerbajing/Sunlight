@@ -1,6 +1,14 @@
 import request from '@/utils/request'
 
 //
+export function loadTheFileManager(query) {
+  return request({
+    url: '/ceshi/manager/file',
+    method: 'get',
+    params: query
+  })
+}
+
 export function nodeManager(query) {
   return request({
     url: '/ceshi/manager/node',

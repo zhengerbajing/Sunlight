@@ -1,6 +1,6 @@
 package com.ruoyi.ceshi.service.impl;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +79,45 @@ public class DeptManagerServiceImpl implements IDeptManagerService
         File rootFolder = new File(url);
         List<Node> list = buildTree(rootFolder);
         return list;
+    }
+
+    //@Override
+    public boolean selectDeptManagerFile(DeptManager deptManager)
+    {
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            System.out.println(deptManager.getUrl());
+            File inFile = new File(deptManager.getUrl());
+            System.out.println(inFile.canRead());
+            File outFile = new File("C:/ruoyi/uploadPath/upload/file/" + deptManager.getFileName());
+            in = new FileInputStream(inFile);
+            out = new FileOutputStream(outFile);
+            byte[] b = new byte[1024];
+            int num;
+            while((num = in.read(b,0,1024)) != -1){
+                out.write(b,0,num);
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if(in != null){
+                try {
+                    in.close();
+                }catch (Exception e){
+                   e.printStackTrace();
+                }
+            }
+            if(out != null){
+                try {
+                    out.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        return true;
     }
     //
 
